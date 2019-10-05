@@ -1,0 +1,50 @@
+{%  extends "base.html" %}
+{%  block head %}
+    {% block title %}
+        <title>Configuration Page</title>
+    {% endblock title %}
+{% endblock head %}
+{% block content %}
+    <div class = "container">
+        <form method="POST" action="{{ url_for('configuration') }}">
+            {{ form.hidden_tag() }}
+            <fieldset class = "form-group">
+                <div class="form-group">
+                    {{ form.username.label() }}
+                    {{ form.username() }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label() }}
+                    {{ form.password() }}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label() }}
+                    {{ form.confirm_password() }}
+                </div>
+                <div class="form-group">
+                    {{ form.selectDifficulty.label() }}
+                    {{ form.selectDifficulty() }}
+                </div>
+                <div class="form-group">
+                    {{ form.allocatePilot.label() }}
+                    {{ form.allocatePilot() }}
+                </div>
+                <div class="form-group">
+                    {{ form.allocateEngineer.label() }}
+                    {{ form.allocateEngineer() }}
+                </div>
+                <div class="form-group">
+                    {{ form.allocateFighter.label() }}
+                    {{ form.allocateFighter() }}
+                </div>
+                <div class="form-group">
+                    {{ form.allocateMerchant.label() }}
+                    {{ form.allocateMerchant() }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+{% endblock content %}
