@@ -23,13 +23,13 @@
 	var map = L.map('image-map', {
 	  minZoom: 1,
 	  maxZoom: 4,
-	  center: [0 0],
+	  center: [0,0],
 	  zoom: 1,
 	  crs: L.CRS.Simple
 	});
 	// dimensions and url of the image
-	var w = 4000,
-	    h = 3000,
+	var w = 2000,
+	    h = 1500,
 	    url = 'https://images.unsplash.com/photo-1522030299830-16b8d3d049fe?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=mike-petrucci-uIf6H1or1nE-unsplash.jpg';
 
 	//make custom icon
@@ -47,7 +47,7 @@
 
         var customPopup = "{{ game.universe.regions[i].name }}<br/><img src='http://joshuafrazier.info/images/maptime.gif' alt='maptime logo gif' width='350px'/>";
 
-        var marker{{i}} = L.icon([{{ -(game.universe.regions[i].coordinates[0] + 200)*1.5 }}, {{ (game.universe.regions[i].coordinates[1] + 200)*1.5 }}],{icon: star_icon}).bindPopup(customPopup,customOptions).addTo(map);
+        var marker{{i}} = L.marker([{{ -(game.universe.regions[i].coordinates[0] + 200)*1.5 }}, {{ (game.universe.regions[i].coordinates[1] + 200)*1.5 }}],{icon: star_icon}).bindPopup(customPopup,customOptions).addTo(map);
     {%  endfor %}
 
 	// calculate the edges of the image, in coordinate space

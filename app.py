@@ -67,8 +67,8 @@ def game():
             difficulty = DifficultyEnum.HARD
         skills = (int(request.args.get('pilotSkill')), int(request.args.get('engineerSkill')), int(request.args.get('merchantSkill')), int(request.args.get('fighterSkill')))
         Game(difficulty, request.args.get('name'), skills)
-        game2 = Game.get_instance()
-    return render_template('game.html', game=Game.get_instance(), len = len(game2.universe.regions))
+        game = Game.get_instance()
+    return render_template('game.html', game = Game.get_instance(), len = len(Game.get_instance().universe.regions))
 
 
 
