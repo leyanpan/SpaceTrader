@@ -6,14 +6,24 @@ from settings import SQUARE_SIDE_MAX, LISTOFNAMES, REGION_NUM, MAX_FUEL
 from Ship import Ship
 from Player import Player
 
+
 class Game:
+    __instance = None
+    @staticmethod
+    def get_instance():
+        if Game.__instance is None:
+            return None
+        return Game.__instance
 
     def __init__(self, game_difficulty, name, skills):
+        if Game.__instance is not None:
+            raise Exception('Game instance already exists')
         self.game_difficulty = game_difficulty
-        self.difficulty_multiplier = int(self.game_difficulty)
+        self.difficulty_multiplier = self.game_difficulty.value
         self.player = None
         self.universe = None
         self.start_game(name, skills)
+        Game.__instance = self
 
     def start_game(self, name, skills):
         names = np.random.choice(LISTOFNAMES, size=10, replace=False)
@@ -27,7 +37,7 @@ class Game:
         self.player = Player(name, skills, ship)
 
     @staticmethod
-    def generate_random_sequence(self, n):
+    def generate_random_sequence(n):
         rand_list = []
         while len(rand_list) < n:
             rand_int = np.random.randint(-SQUARE_SIDE_MAX, SQUARE_SIDE_MAX)
