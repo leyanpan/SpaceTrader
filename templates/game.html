@@ -1,58 +1,65 @@
-<head>
-    <title>Rendering Markers on Image</title>
+{% extends "base.html" %}
+{% block head %}
+    {% block title %}
+        <title>Game</title>
+    {% endblock title %}
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
 	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
-</head>
-
+{% endblock head %}
+{% block style %}
 <style>
 	#image-map {
-	  width: 2880px;
-	  height: 1880px;
+	  width: 1000px;
+	  height: 1000px;
 	  border: 1px solid #ccc;
 	  margin:10px;
 	}
 </style>
+{% endblock %}
 
-<body>
+{% block content %}
 	<div id="image-map"></div>
 	<button type="button" onclick="getAllMarkers();">Pop Up All Marker Dimensions</button>
-</body>
-
+{% endblock content %}
+{% block scripts %}
 <script>
 	// create the slippy map
 	var map = L.map('image-map', {
 	  minZoom: 1,
 	  maxZoom: 4,
-	  center: [0,0],
+	  center: [0, 0],
 	  zoom: 1,
 	  crs: L.CRS.Simple
 	});
 	// dimensions and url of the image
-	var w = 2000,
-	    h = 1500,
+	var w = 2048,
+	    h = 2048,
 	    url = 'https://images.unsplash.com/photo-1522030299830-16b8d3d049fe?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=mike-petrucci-uIf6H1or1nE-unsplash.jpg';
 
 	//make custom icon
     var star_icon = L.icon({
-        iconUrl: '/Users/jianghazel/Documents/cs2340/SpaceTrader/templates/star.png',
-        iconSize: [38, 95], // size of the icon
+        iconUrl: 'static/star.png',
+        iconSize: [38, 38], // size of the icon
         popupAnchor: [0,-15]
         });
     var customOptions =
         {
-        'maxWidth': '500',
+        'maxWidth': '1000',
         }
     //var marker = L.marker([-100, 100]).addTo(map);
     {% for i in range(0,len) %}
 
-        var customPopup = "{{ game.universe.regions[i].name }}<br/><img src='http://joshuafrazier.info/images/maptime.gif' alt='maptime logo gif' width='350px'/>";
+        var customPopup = "{{ game.universe.regions[i].name }}<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/><button class=\"btn btn-primary\"/>Travel</button>";
 
-        var marker{{i}} = L.marker([{{ -(game.universe.regions[i].coordinates[0] + 200)*1.5 }}, {{ (game.universe.regions[i].coordinates[1] + 200)*1.5 }}],{icon: star_icon}).bindPopup(customPopup,customOptions).addTo(map);
+        var marker{{i}} = L.marker([{{ -(game.universe.regions[i].coordinates[0] + 200) }}, {{ (game.universe.regions[i].coordinates[1] + 200) }}],{icon: star_icon}).bindPopup(customPopup,customOptions).addTo(map);
     {%  endfor %}
-
+    map.on('click', function(e) {
+        alert(e.latlng);
+    } );
 	// calculate the edges of the image, in coordinate space
-	var southWest = map.unproject([0, h], map.getMaxZoom()-1);
-	var northEast = map.unproject([w, 0], map.getMaxZoom()-1);
+	var southWest = map.unproject([0, h], map.getMaxZoom()-2);
+	var northEast = map.unproject([w, 0], map.getMaxZoom()-2);
+
 	var bounds = new L.LatLngBounds(southWest, northEast);
 	L.imageOverlay(url, bounds).addTo(map);
 	map.setMaxBounds(bounds);
@@ -65,3 +72,4 @@
 	    console.log(JSON.stringify(allMarkersObjArray));
 	}
 </script>
+{% endblock scripts %}
