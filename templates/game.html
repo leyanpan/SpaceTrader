@@ -38,7 +38,7 @@
 
 	//make custom icon
     var star_icon = L.icon({
-        iconUrl: 'static/star.png',
+        iconUrl: 'static/star2.png',
         iconSize: [38, 38], // size of the icon
         popupAnchor: [0,-15]
         });
@@ -49,13 +49,16 @@
     //var marker = L.marker([-100, 100]).addTo(map);
     {% for i in range(0,len) %}
 
-        var customPopup = "{{ game.universe.regions[i].name }}<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/><button class=\"btn btn-primary\"/>Travel</button>";
-
+        var customPopup = "{{ game.universe.regions[i].name }}<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/><button class=\"btn btn-primary\" onclick = \"myFunction()\"/>Travel</button>";
         var marker{{i}} = L.marker([{{ -(game.universe.regions[i].coordinates[0] + 200) }}, {{ (game.universe.regions[i].coordinates[1] + 200) }}],{icon: star_icon}).bindPopup(customPopup,customOptions).addTo(map);
+        function myFunction() {
+            location.href = "/game/{{ game.universe.regions[i].name }}"
+        }
     {%  endfor %}
     map.on('click', function(e) {
         alert(e.latlng);
     } );
+
 	// calculate the edges of the image, in coordinate space
 	var southWest = map.unproject([0, h], map.getMaxZoom()-2);
 	var northEast = map.unproject([w, 0], map.getMaxZoom()-2);
