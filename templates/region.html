@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block head %}
+    {% block title %}
+        <title>Welcome to Milky Way!</title>
+    {% endblock title %}
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+{% endblock head %}
+{% block style %}
+<style>
+	#image-map {
+	  width: 1000px;
+	  height: 1000px;
+	  border: 1px solid #ccc;
+	  margin:10px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+	<div id="image-map"></div>
+	<button type="button" onclick="getAllMarkers();">Pop Up All Marker Dimensions</button>
+{% endblock content %}
+{% block scripts %}
+<script>
+	// create the slippy map
+	var map = L.map('image-map', {
+	  minZoom: 1,
+	  maxZoom: 4,
+	  center: [0, 0],
+	  zoom: 1,
+	  crs: L.CRS.Simple
+	});
+	// dimensions and url of the image
+	var w = 2048,
+	    h = 2048,
+	    url = 'static/images_regions/{{ }}.JPG';
+</script>
+{% endblock scripts %}

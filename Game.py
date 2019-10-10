@@ -58,7 +58,7 @@ class Game:
         return possible_regions
 
     def calculate_cost_to(self, region):
-        return self.player.region.calculate_distnace(region) * self.difficulty_multiplier
+        return self.player.region.calculate_distance(region) * self.difficulty_multiplier
 
 
 class DifficultyEnum(Enum):

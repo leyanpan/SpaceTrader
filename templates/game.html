@@ -20,6 +20,9 @@
 {% block content %}
 	<div id="image-map"></div>
 	<button type="button" onclick="getAllMarkers();">Pop Up All Marker Dimensions</button>
+    <label id="RegionName">Region Name</label>
+    <label id="techLevel">Technical Level</label>
+    <label id="coordinate">Coordinate</label>
 {% endblock content %}
 {% block scripts %}
 <script>
@@ -34,7 +37,7 @@
 	// dimensions and url of the image
 	var w = 2048,
 	    h = 2048,
-	    url = 'https://images.unsplash.com/photo-1522030299830-16b8d3d049fe?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&dl=mike-petrucci-uIf6H1or1nE-unsplash.jpg';
+	    url = '/static/images_regions/background.jpg';
 
 	//make custom icon
     var star_icon = L.icon({
@@ -49,11 +52,19 @@
     //var marker = L.marker([-100, 100]).addTo(map);
     {% for i in range(0,len) %}
 
-        var customPopup = "{{ game.universe.regions[i].name }}<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/><button class=\"btn btn-primary\" onclick = \"myFunction()\"/>Travel</button>";
+        var customPopup = "{{ game.universe.regions[i].name }}<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/><button id = \"travel\" class=\"btn btn-primary\" onclick=\"myFunction()\"/>Travel</button>";
         var marker{{i}} = L.marker([{{ -(game.universe.regions[i].coordinates[0] + 200) }}, {{ (game.universe.regions[i].coordinates[1] + 200) }}],{icon: star_icon}).bindPopup(customPopup,customOptions).addTo(map);
-        function myFunction() {
-            location.href = "/game/{{ game.universe.regions[i].name }}"
-        }
+        var travelButton = document.getElementById('travel');
+        travelButton.addEventListener("click", function () {
+            url = {{ game.universe.regions[i].image_name }};
+             var clickMeButton = document.createElement('button');
+             clickMeButton.innerHTML = 'Back to the Map';
+             var body = document.getElementsByTagName("content");
+             body.appendChild(clickMeButton);
+            document.getElementById('RegionName').innerText = {{ game.universe.regions[i].name }};
+            document.getElementById('techLevel').innerText = {{ game.universe.regions[i].techLevel }};
+            document.getElementById('coordinate').innerText = {{ game.universe.regions[i].coordinates }}
+        })
     {%  endfor %}
     map.on('click', function(e) {
         alert(e.latlng);

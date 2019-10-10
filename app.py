@@ -67,24 +67,13 @@ def game():
             difficulty = DifficultyEnum.HARD
         skills = (int(request.args.get('pilotSkill')), int(request.args.get('engineerSkill')), int(request.args.get('merchantSkill')), int(request.args.get('fighterSkill')))
         Game(difficulty, request.args.get('name'), skills)
-    return render_template('game.html', game = Game.get_instance(), len = len(Game.get_instance().universe.regions))
+    return render_template('game.html', game = Game.get_instance(), len=len(Game.get_instance().universe.regions))
 
 
 
 @app.route('/Region')
 def region():
-    if Game.get_instance() is None:
-        difficulty_string = request.args.get('difficulty')
-        difficulty = None
-        if difficulty_string == 'easy':
-            difficulty = DifficultyEnum.EASY
-        elif difficulty_string == 'medium':
-            difficulty = DifficultyEnum.MEDIUM
-        else:
-            difficulty = DifficultyEnum.HARD
-        skills = (int(request.args.get('pilotSkill')), int(request.args.get('engineerSkill')), int(request.args.get('merchantSkill')), int(request.args.get('fighterSkill')))
-        Game(difficulty, request.args.get('name'), skills)
-    return render_template('region.html', game = Game.get_instance())
+    return render_template('region.html')
 
 
 
