@@ -47,6 +47,7 @@ def configuration():
         fighterSkill = form.allocateFighter.data
         name = form.username.data
         sum = int(pilotSkill) + int(engineerSkill) + int(merchantSkill) + int(fighterSkill)
+        Game.remove_instance()
         if (value == 'easy' and sum <= 16) or (value == 'medium' and sum <= 12) or (value == 'hard' and sum <= 8):
             return redirect(url_for('game', difficulty=value, pilotSkill=pilotSkill, engineerSkill=engineerSkill,
                                     merchantSkill=merchantSkill, fighterSkill=fighterSkill, name=name))

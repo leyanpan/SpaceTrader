@@ -15,3 +15,7 @@ class Universe:
 
     def get_all_regions(self):
         return self.regions
+
+    @staticmethod
+    def remove_instance():
+        Universe.__instance = None

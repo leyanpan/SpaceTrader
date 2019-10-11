@@ -25,6 +25,11 @@ class Game:
         self.start_game(name, skills)
         Game.__instance = self
 
+    @staticmethod
+    def remove_instance():
+        Game.__instance = None
+        Universe.remove_instance()
+
     def start_game(self, name, skills):
         names = np.random.choice(LISTOFNAMES, size=10, replace=False)
         xs = Game.generate_random_sequence(REGION_NUM)

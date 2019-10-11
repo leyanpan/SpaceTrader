@@ -56,7 +56,7 @@
     //var marker = L.marker([-100, 100]).addTo(map);
     {% for i in range(0,len) %}
 
-        var customPopup = "{{ game.universe.regions[i].name }}<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/><button id = \"travel\" class=\"btn btn-primary\" onclick=\"travel({{ "\"" + game.universe.regions[i].name + "\""}})\"/>Travel</button>";
+        var customPopup = "{{ game.universe.regions[i].name }}<br/>Coordinates: ({{ game.universe.regions[i].coordinates[0] }}, {{ game.universe.regions[i].coordinates[1] }})<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/>TechLevel:{{ game.player.region.techLevel.name }}<br\><button id = \"travel\" class=\"btn btn-primary\" onclick=\"travel({{ "\"" + game.universe.regions[i].name + "\""}})\"/>Travel</button>";
         var marker{{i}} = L.marker([
             {{ -(game.universe.regions[i].coordinates[0] + 200) * 1.12 }},
             {{ (game.universe.regions[i].coordinates[1] + 200) * 1.12 }}],
