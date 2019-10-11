@@ -8,7 +8,7 @@ UPLOAD_FOLDER = '/Documents/cs2340/SpaceTrader/images_regions'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Contributors: Leyan Pan, Jintong Jiang, Hanzhong Kang
+# Contributors: Leyan Pan, Jintong Jiang, Hanzhong Kang, Wanli Qian
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/welcome')
