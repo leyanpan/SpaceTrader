@@ -1,6 +1,6 @@
 from enum import Enum
-from region import Region, TechLevel
 import numpy as np
+from region import Region
 from universe import Universe
 from settings import SQUARE_SIDE_MAX, LISTOFNAMES, REGION_NUM, MAX_FUEL
 from ship import Ship
@@ -22,6 +22,7 @@ class Game:
         self.difficulty_multiplier = self.game_difficulty.value
         self.player = None
         self.universe = None
+        self.name_region = None
         self.start_game(name, skills)
         Game.__instance = self
 
@@ -32,21 +33,21 @@ class Game:
 
     def start_game(self, name, skills):
         names = np.random.choice(LISTOFNAMES, size=10, replace=False)
-        xs = Game.generate_random_sequence(REGION_NUM)
-        ys = Game.generate_random_sequence(REGION_NUM)
+        x_s = Game.generate_random_sequence(REGION_NUM)
+        y_s = Game.generate_random_sequence(REGION_NUM)
         regions = []
         self.name_region = {}
         for i in range(10):
-            self.name_region[names[i]] = Region((xs[i], ys[i]), names[i])
+            self.name_region[names[i]] = Region((x_s[i], y_s[i]), names[i])
             regions.append(self.name_region[names[i]])
         self.universe = Universe(regions)
         ship = Ship(np.random.choice(self.universe.regions), MAX_FUEL)
         self.player = Player(name, skills, ship)
 
     @staticmethod
-    def generate_random_sequence(n):
+    def generate_random_sequence(num):
         rand_list = []
-        while len(rand_list) < n:
+        while len(rand_list) < num:
             rand_int = np.random.randint(-SQUARE_SIDE_MAX, SQUARE_SIDE_MAX)
             valid = True
             for prev in rand_list:
@@ -60,7 +61,7 @@ class Game:
         current_region = self.player.region
         possible_regions = []
         for region in self.universe.regions:
-            if not region is current_region:
+            if region is not current_region:
                 possible_regions.append(region)
         return possible_regions
 

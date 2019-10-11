@@ -19,7 +19,7 @@
 
 {% block content %}
     <label id="RegionName">You are at: {{ game.player.region.name }}</label><br>
-    <label id="techLevel">Technical Level: {{ game.player.region.techLevel.name }}</label><br>
+    <label id="techLevel">Technical Level: {{ game.player.region.tech_level.name }}</label><br>
     <label id="coordinate">Coordinates: ({{ game.player.region.coordinates[0] }},{{ game.player.region.coordinates[1] }})</label>
 	<div id="image-map"></div>
 {% endblock content %}
@@ -56,10 +56,10 @@
     //var marker = L.marker([-100, 100]).addTo(map);
     {% for i in range(0,len) %}
 
-        var customPopup = "{{ game.universe.regions[i].name }}<br/>Coordinates: ({{ game.universe.regions[i].coordinates[0] }}, {{ game.universe.regions[i].coordinates[1] }})<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/>TechLevel:{{ game.player.region.techLevel.name }}<br\><button id = \"travel\" class=\"btn btn-primary\" onclick=\"travel({{ "\"" + game.universe.regions[i].name + "\""}})\"/>Travel</button>";
+        var customPopup = "{{ game.universe.regions[i].name }}<br/>Coordinates: ({{ game.universe.regions[i].coordinates[0] }}, {{ game.universe.regions[i].coordinates[1] }})<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/>TechLevel:{{ game.player.region.tech_level.name }}<br\><button id = \"travel\" class=\"btn btn-primary\" onclick=\"travel({{ "\"" + game.universe.regions[i].name + "\""}})\"/>Travel</button>";
         var marker{{i}} = L.marker([
-            {{ -(game.universe.regions[i].coordinates[0] + 200) * 1.12 }},
-            {{ (game.universe.regions[i].coordinates[1] + 200) * 1.12 }}],
+            {{ -(game.universe.regions[i].coordinates[0] + 230) * 1.12 }},
+            {{ (game.universe.regions[i].coordinates[1] + 230) * 1.12 }}],
             {icon: {{'star_icon' if i != game.current_region_num else 'spaceship_icon'}} })
             .bindPopup(customPopup,customOptions).addTo(map);
     {%  endfor %}

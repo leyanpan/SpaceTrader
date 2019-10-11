@@ -5,3 +5,6 @@ class Ship:
 
     def travel_to_region(self, region):
         self.region = region
+
+    def get_region(self):
+        return self.region

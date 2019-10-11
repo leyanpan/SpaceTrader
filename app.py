@@ -1,15 +1,12 @@
-from flask import Flask, request, render_template, url_for, redirect, flash
+from flask import Flask, request, render_template, url_for, redirect
 from forms import RegistrationForm
 from game import Game, DifficultyEnum
-from werkzeug.utils import secure_filename
-import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cd291fd59e221b9a3a13c13b3b5dbc9e'
 UPLOAD_FOLDER = '/Documents/cs2340/SpaceTrader/images_regions'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-skills = None
 
 # def allowed_file(filename):
 #     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -25,24 +22,27 @@ def configuration():
     form = RegistrationForm()
     if form.validate_on_submit():
         value = form.selectDifficulty.data
-        pilotSkill = form.allocatePilot.data
-        engineerSkill = form.allocateEngineer.data
-        merchantSkill = form.allocateMerchant.data
-        fighterSkill = form.allocateFighter.data
+        pilot_skill = form.allocatePilot.data
+        engineer_skill = form.allocateEngineer.data
+        merchant_skill = form.allocateMerchant.data
+        fighter_skill = form.allocateFighter.data
         name = form.username.data
-        sum = int(pilotSkill) + int(engineerSkill) + int(merchantSkill) + int(fighterSkill)
+        sum_value = int(pilot_skill) + int(engineer_skill) +\
+                    int(merchant_skill) + int(fighter_skill)
         Game.remove_instance()
-        if (value == 'easy' and sum <= 16):
-            return redirect(url_for('game', difficulty=value, pilotSkill=pilotSkill, engineerSkill=engineerSkill,
-                                    merchantSkill=merchantSkill, fighterSkill=fighterSkill, name=name))
-        if (value == 'medium' and sum <= 12):
-            return redirect(url_for('game', difficulty=value, pilotSkill=pilotSkill, engineerSkill=engineerSkill,
-                                    merchantSkill=merchantSkill, fighterSkill=fighterSkill, name=name))
-        if (value == 'hard' and sum <= 8):
-            return redirect(url_for('game', difficulty=value, pilotSkill=pilotSkill, engineerSkill=engineerSkill,
-                                    merchantSkill=merchantSkill, fighterSkill=fighterSkill, name=name))
-    else:
-        return render_template('configuration.html', form=form)
+        if (value == 'easy' and sum_value <= 16):
+            return redirect(url_for('game', difficulty=value, pilotSkill=pilot_skill,\
+                                    engineerSkill=engineer_skill, merchantSkill=merchant_skill,\
+                                    fighterSkill=fighter_skill, name=name))
+        if (value == 'medium' and sum_value <= 12):
+            return redirect(url_for('game', difficulty=value, pilotSkill=pilot_skill,\
+                                    engineerSkill=engineer_skill, merchantSkill=merchant_skill,\
+                                    fighterSkill=fighter_skill, name=name))
+        if (value == 'hard' and sum_value <= 8):
+            return redirect(url_for('game', difficulty=value, pilotSkill=pilot_skill,\
+                                    engineerSkill=engineer_skill, merchantSkill=merchant_skill,\
+                                    fighterSkill=fighter_skill, name=name))
+    return render_template('configuration.html', form=form)
 
 
 @app.route('/game')
@@ -56,12 +56,14 @@ def game():
             difficulty = DifficultyEnum.MEDIUM
         else:
             difficulty = DifficultyEnum.HARD
-        skills = (int(request.args.get('pilotSkill')), int(request.args.get('engineerSkill')), int(request.args.get('merchantSkill')), int(request.args.get('fighterSkill')))
+        skills = (int(request.args.get('pilotSkill')), int(request.args.get('engineerSkill')),\
+                  int(request.args.get('merchantSkill')), int(request.args.get('fighterSkill')))
         Game(difficulty, request.args.get('name'), skills)
     else:
-        game = Game.get_instance()
-        game.travel_to_region_string(request.args.get('travel'))
-    return render_template('game.html', game = Game.get_instance(), len=len(Game.get_instance().universe.regions))
+        game_instance = Game.get_instance()
+        game_instance.travel_to_region_string(request.args.get('travel'))
+    return render_template('game.html', game=Game.get_instance(),\
+                           len=len(Game.get_instance().universe.regions))
 
 
 
