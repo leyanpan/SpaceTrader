@@ -30,8 +30,10 @@ class Game:
         xs = Game.generate_random_sequence(REGION_NUM)
         ys = Game.generate_random_sequence(REGION_NUM)
         regions = []
+        self.name_region = {}
         for i in range(10):
-            regions.append(Region(np.random.choice(list(TechLevel)), (xs[i], ys[i]), names[i]))
+            self.name_region[names[i]] = Region((xs[i], ys[i]), names[i])
+            regions.append(self.name_region[names[i]])
         self.universe = Universe(regions)
         ship = Ship(np.random.choice(self.universe.regions), MAX_FUEL)
         self.player = Player(name, skills, ship)
@@ -59,6 +61,13 @@ class Game:
 
     def calculate_cost_to(self, region):
         return self.player.region.calculate_distance(region) * self.difficulty_multiplier
+
+    @property
+    def current_region_num(self):
+        return self.universe.regions.index(self.player.region)
+
+    def travel_to_region_string(self, region):
+        self.player.travel_to_region(self.name_region[region])
 
 
 class DifficultyEnum(Enum):

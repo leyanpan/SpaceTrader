@@ -6,7 +6,7 @@ class Region:
         self.techLevel = random.choice(list(TechLevel))
         self.coordinates = coordinates
         self.name = name
-        self.image_name = "/static/images_regions/" + name.replace(' ', '') + ".JPG"
+        self.image_url = "/static/images_regions/" + name.replace(' ', '') + ".JPG"
 
     def calculate_distance(self, other_region):
         other_coordinates = other_region.coordinates
