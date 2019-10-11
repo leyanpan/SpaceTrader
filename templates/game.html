@@ -18,11 +18,10 @@
 {% endblock %}
 
 {% block content %}
+    <label id="RegionName">You are at: {{ game.player.region.name }}</label><br>
+    <label id="techLevel">Technical Level: {{ game.player.region.techLevel.name }}</label><br>
+    <label id="coordinate">Coordinates: ({{ game.player.region.coordinates[0] }},{{ game.player.region.coordinates[1] }})</label>
 	<div id="image-map"></div>
-	<button type="button" onclick="getAllMarkers();">Pop Up All Marker Dimensions</button>
-    <label id="RegionName">Region Name</label>
-    <label id="techLevel">Technical Level</label>
-    <label id="coordinate">Coordinate</label>
 {% endblock content %}
 {% block scripts %}
 <script>
@@ -37,14 +36,19 @@
 	// dimensions and url of the image
 	var w = 2048,
 	    h = 2048,
-	    url = '/static/images_regions/background.jpg';
+	    url = "{{ game.player.region.image_url }}";
 
 	//make custom icon
     var star_icon = L.icon({
         iconUrl: 'static/star2.png',
         iconSize: [38, 38], // size of the icon
-        popupAnchor: [0,-15]
+        popupAnchor: [0, -15]
         });
+    var spaceship_icon = L.icon({
+        iconUrl: 'static/spaceship.jpg',
+        iconSize:[38, 38],
+        popupAnchor: [0, -15]
+    })
     var customOptions =
         {
         'maxWidth': '1000',
@@ -52,23 +56,13 @@
     //var marker = L.marker([-100, 100]).addTo(map);
     {% for i in range(0,len) %}
 
-        var customPopup = "{{ game.universe.regions[i].name }}<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/><button id = \"travel\" class=\"btn btn-primary\" onclick=\"myFunction()\"/>Travel</button>";
-        var marker{{i}} = L.marker([{{ -(game.universe.regions[i].coordinates[0] + 200) }}, {{ (game.universe.regions[i].coordinates[1] + 200) }}],{icon: star_icon}).bindPopup(customPopup,customOptions).addTo(map);
-        var travelButton = document.getElementById('travel');
-        travelButton.addEventListener("click", function () {
-            url = {{ game.universe.regions[i].image_name }};
-             var clickMeButton = document.createElement('button');
-             clickMeButton.innerHTML = 'Back to the Map';
-             var body = document.getElementsByTagName("content");
-             body.appendChild(clickMeButton);
-            document.getElementById('RegionName').innerText = {{ game.universe.regions[i].name }};
-            document.getElementById('techLevel').innerText = {{ game.universe.regions[i].techLevel }};
-            document.getElementById('coordinate').innerText = {{ game.universe.regions[i].coordinates }}
-        })
+        var customPopup = "{{ game.universe.regions[i].name }}<br/>Cost: {{ game.calculate_cost_to(game.universe.regions[i]) }}<br/><button id = \"travel\" class=\"btn btn-primary\" onclick=\"travel({{ "\"" + game.universe.regions[i].name + "\""}})\"/>Travel</button>";
+        var marker{{i}} = L.marker([
+            {{ -(game.universe.regions[i].coordinates[0] + 200) * 1.12 }},
+            {{ (game.universe.regions[i].coordinates[1] + 200) * 1.12 }}],
+            {icon: {{'star_icon' if i != game.current_region_num else 'spaceship_icon'}} })
+            .bindPopup(customPopup,customOptions).addTo(map);
     {%  endfor %}
-    map.on('click', function(e) {
-        alert(e.latlng);
-    } );
 
 	// calculate the edges of the image, in coordinate space
 	var southWest = map.unproject([0, h], map.getMaxZoom()-2);
@@ -77,13 +71,9 @@
 	var bounds = new L.LatLngBounds(southWest, northEast);
 	L.imageOverlay(url, bounds).addTo(map);
 	map.setMaxBounds(bounds);
-	function getAllMarkers() {
-	    var allMarkersObjArray = [];//new Array();
-        {% for i in range(0,len) %}
-            allMarkersObjArray.push(marker{{i}}._latlng);
-        {%  endfor %}
-	    alert(JSON.stringify(allMarkersObjArray));
-	    console.log(JSON.stringify(allMarkersObjArray));
-	}
+
+	function travel(target) {
+	    window.location.href = '/game?travel=' + target
+    }
 </script>
 {% endblock scripts %}
